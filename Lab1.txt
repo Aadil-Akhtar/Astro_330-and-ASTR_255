@@ -1,0 +1,230 @@
+1) Review the computational infrastructure around our data science environments
+2) Ensure that python environment is set up with proper installed packages
+3) review basic data science operations in python
+
+Part I)
+Computational ecosystem:-
+python            - a programming language mainly used for backend web development ** Object oriented language
+the terminal      - program which executes commands **without GUI
+the file system   - the file tree which contains info where each file is placed **is a data structure that OSs
+                    use to control how data is stored and retrieved.
+jupyter           - an online python notebook and running environment **original web application for creating anf sharing computational documents
+IDE               - dont know ** Integrated Development Environment is a software for building applications
+                     that combines common developer tools into a single graphical user interface. like atom
+a text editor     - place where we can write text like notepad.
+git               - version control that saves our progress **
+PATH              - ** PATH is an environment variable on Unix-like operating systems, DOS, OS/2, and Microsoft Windows, specifying a set of directories where executable programs are located. In general, each executing process or user session has its own PATH setting.
+
+We can see our full path by echoing it from the terminal:-
+
+echo $PATH
+
+We can check python as follows:-
+
+which python
+
+Setting up an environment:-
+ An environment is the system on which your code is being executed. When you fire up a terminal, this is usually your base environment, the default one for your user on a given computer system. But rather than always installing programs in this base installation, we can create custom environments for each of our projects. We can then install the exact dependencies for those projects within our environments, and we’ll know they won’t mess with each other.
+We will use a conda environment
+In the anaconda terminal:-
+
+conda create -n a330 python=3.8
+conda activate a330
+
+
+a file called .bash_profile allows us to set aliases and environment variables.
+what should have been there in the bash _profile file:-
+# >>> conda init >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$(CONDA_REPORT_ERRORS=false '/anaconda3/bin/conda' shell.bash hook 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    \eval "$__conda_setup"
+else
+    if [ -f "/anaconda3/etc/profile.d/conda.sh" ]; then
+# . "/anaconda3/etc/profile.d/conda.sh"  # commented out by conda initialize
+        CONDA_CHANGEPS1=false conda activate base
+    else
+        \export PATH="/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda init <<<
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export PATH=$PATH:/Users/ipasha/anaconda3/bin
+export PYTHONPATH=/Users/ipasha/anaconda3/bin/python3.8
+PATH=$PATH:.
+alias python='python3'
+
+
+[K[?1l>/ipasha/.bash_profile[m[K
+
+
+$ Adding Jupyter
+We will use notebooks during this class and we need to make sure that we can access our new environment from within jupyter notebook
+
+first we activate the environment.
+then we type:-
+conda install -c anaconda ipykernel #This ensures that we can select different kernels inside jupyter.
+Kernel - "the thing that is python", the root thing being run on our system when we use python
+
+By creating environments, we create different unique kernels, and we can
+now get to them within our notebooks
+
+Then we run:-
+python -m ipykernel install --user --name=a330
+
+To install jupyter lab:-
+conda install -c conda-forge jupyterlab
+type
+jupyter lab to open jupyter lab
+
+
+To install the required packages
+conda install -n a330 numpy scipy astropy matplotlib
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Given solutions
+1)
+import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+# Solution 1
+mu = 10
+sigma = 2
+Gauss = stats.norm(loc=mu,scale=sigma)
+array = Gauss.rvs((1000,1000))
+fig, ax = plt.subplots(figsize=(10,10))
+ax.imshow(array,origin='lower');
+
+#Solution 2:
+array_np = np.random.normal(loc=10,scale=2,size=(1000,1000))
+fig, ax = plt.subplots(figsize=(10,10))
+ax.imshow(array_np,origin='lower');
+
+2)
+# Solution 
+outliers = np.where((array>mu+3*sigma)|(array<mu-3*sigma))
+fig, ax = plt.subplots(figsize=(10,10))
+ax.imshow(array,origin='lower')
+ax.plot(outliers[0],outliers[1],'o',ms=5,color='None',mec='r');
+
+
+3)
+# Solution 
+clipped_array = np.ma.masked_where((array>mu+3*sigma)|(array<mu-3*sigma),array)
+print(f'Clipped Mean: {np.mean(clipped_array):.3f}  |  Clipped Sigma: {np.std(clipped_array):.3f}')
+
+
+# solution 2
+m= (array < mu+3.*sigma) & (array>mu-3.*sigma)
+
+mn = np.mean(array[m])
+st = np.std(array[m])
+print('Clipped mean; {:0.3f};  Clipped Sigma: {:0.3f}'.format(mn,st))
+
+4)solution
+cent = int(array.shape[0] / 2)
+perc = int(0.2 * array.shape[0]*0.5)
+cropped_array = array[cent-perc:cent+perc,cent-perc:cent+perc]
+fig, ax = plt.subplots(figsize=(10,10))
+ax.imshow(cropped_array,origin='lower',cmap='gray_r');
+
+
+5)#Solution
+matrix_a = np.repeat(a,len(b)).reshape(len(a),len(b))
+matrix_b = np.repeat(b,len(a)).reshape((len(b)),len(a)).T
+output = np.sum(matrix_a*matrix_b)
+
+or
+output = np.sum(a[:,np.newaxis]*b)
+
+
+6)#Solution
+def chi2(a,b):
+    return ((15-a)**2+(12-b)**2)**0.2 #note, this is nonsense, but should return a different value for each input a,b
+
+# Solution 
+a = np.linspace(1,25,10)
+b = np.linspace(1,25,10)
+chi2_values = []
+for i in a:
+    for j in b:
+        chi2_values.append(chi2(i,j))
+
+chi2_values = np.array(chi2_values)
+
+xx,yy = np.meshgrid(a,b)
+
+fig, ax = plt.subplots(figsize=(12,10))
+
+im = ax.scatter(xx,yy,c=chi2_values,marker='o',s=100)
+plt.colorbar(im);
+
+
+7) Solution
+
+fig, ax = plt.subplots(figsize=(12,10))
+
+im = ax.scatter(xx,yy,c=chi2_values,marker='o',s=100)
+ax.tick_params(direction='in',right=True,top=True,length=7,width=1.5,labelsize=14)
+ax.set_xlabel(r'parameter $a$',fontsize=15)
+ax.set_ylabel(r'parameter $b$',fontsize=15)
+cbar = plt.colorbar(im)
+cbar.set_label(r'model $\chi^2$',fontsize=14)
+
+8) Solution
+
+visited_cities = ['San Diego', 'Boston', 'New York City','Atlanta']
+all_cities = ['San Diego', 'Denver', 'Boston', 'Portland', 'New York City', 'San Francisco', 'Atlanta']
+
+not_visited = []
+
+not_visited = [i for i in all_cities if i not in visited_cities]
+print(not_visited)
+
+
+full = np.arange(1,31)
+squared_odds = np.array([i**2 for i in full if i%2!=0])
+print(squared_odds)
+
+
+
+first_names = ['Bob','Samantha','John','Renee']
+last_names = ['Smith','Bee','Oliver','Carpenter']
+
+# Solution
+full_names = [i+' '+j for i,j in zip(first_names,last_names)]
+print(full_names)
+
+
+all_names = ['sMitH,BoB   ', '  bee,samanthA',' oLIVER,JOHN ','  caRPENTer,reneE  ']
+
+# solution 
+full_names = [i.strip().split(',')[1].upper()[0]
+              +i.strip().split(',')[1].lower()[1:]
+              +' '
+              +i.strip().split(',')[0].upper()[0]
+              +i.strip().split(',')[0].lower()[1:]
+              for i in all_names]
+print(full_names)
+
+
+9) #Solution
+
+XX = np.array([1,2,3,4,5,6,7,8,9])
+YY = np.array([5,6,7,8,9,10,11,12,13])
+ZZ = np.array([10,11,12,13,14,15,16,17,18])
+
+#solution
+cols = np.column_stack((XX,YY,ZZ))
+cols
+
+
+10)#Solution
+
+# Solution 
+
+def Tvir(M,z,mu=0.59):
+    return ((5.6e4*u.K)*(mu/0.59)*(M/(1e10*u.Msun))**(2/3.)*((1+z)/4)).to(u.K)
+
+Tvir(10**11*u.Msun,z=3)

@@ -1,0 +1,23 @@
+You got this!
+
+Course objectives:-
+1) provide students with the fundamentals of building astronomical pipelines 
+2) general use of cutting edge tools and techniques currently used in the astronomical community
+3) discuss and build software for the analysis, manipulation, reduction and visualization of astronomical data from observations and simulations
+
+Course format:-
+* weekly python lectures
+* in-depth tutorial/workshop
+* seminar lectures
+* weekly coding assignments and a final capstone project
+
+Lab assignments and Github:-
+assignment - jupyter notebooks from github
+
+Capstone projects goals:-
+* stored as functions and classes in python modules
+* be imported into other code for general use
+* installable via pip, allowing functions/classes to be imported from anywhere on the system
+* distributed and maintained on github
+
+

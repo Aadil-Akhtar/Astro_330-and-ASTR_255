@@ -1,0 +1,28 @@
+1) Fundamentals recap and review- setting up conda environments
+   numpy array manipulations, list comprehensions, plotting and fitting
+
+2) Astronomical imaging - analysis of astronomical images (e.g. FITS imaging ffrom HST)
+   emphasize handling with FITS, and creation of robust functions in python. 
+   write functions to plot astronomical imaging which handled WCS coordinate transformations
+   , scaling, and optional arguments for colorbars and other features
+   Then array manipulation and the astropy photoutils package to perform aperture photometry on sources
+
+3) Object Oriented Programming - *construction of class objects with attributes and methods
+   * creation of a full pipeline to perform PSF photometry on the stars in an image
+   *pipelines, created as a series of methods for a class, performed calibrations (dark subtraction, flatfielding)
+    , background estimation and subtraction, masking of galaxies in the frame, algorithmic detection of the stars,
+    centroiding of those stars, calculation of the second moments, and ultimately the creation of PSF models
+    that were used to estimate the flux of each star in the frame
+
+4) Sampling and MCMC - fitting models to data
+   chi-squared fitting and first taste of emcee
+
+5) Stellar spectroscopy and MCMC Fitting - *read in and modify the real and synthetic data and match their continuua
+   and smooth the synthetic spectra to the instrumental resolution to find the best fit radial velocities of the stars
+
+6) Pandas - data management library
+   * creating and operating on pandas DataFrames, including row and column based indexing
+    filtering on conditions, and joining tables using set theory/SQL style commands.
+7) Packages - package creation for final project
+
+8) Interactivity - matplotlib, streamlit package
